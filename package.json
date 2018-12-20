@@ -6,9 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1bot-velvet/node-course-2-todo-api.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1bot-velvet/node-course-2-todo-api/issues"
+  },
+  "homepage": "https://github.com/1bot-velvet/node-course-2-todo-api#readme",
   "dependencies": {
-    "mongodb": "^2.2.5"
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongodb": "^2.2.5",
+    "mongoose": "^4.5.9"
   }
 }

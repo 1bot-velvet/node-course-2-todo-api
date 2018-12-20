@@ -25,10 +25,18 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   // db.collection('Todos').findOneAndDelete({completed: false}).then ((result) => {
   //   console.log(result);
   // });
-  db.collection('Users').findOneAndDelete({_id: new ObjectID("5c12b0fccfa2d812c4174928")}).then((results) => {
-    console.log(JSON.stringify(results, undefined, 2));
+  // db.collection('Users').findOneAndDelete({_id: new ObjectID("5c12b0fccfa2d812c4174928")}).then((results) => {
+  //   console.log(JSON.stringify(results, undefined, 2));
   });
 //challange
 
   // db.close();
 });
+db.collection('Users').findOneAndUpdate({
+  _id: new ObjectID('5c128e5c03bb4005ac5c479d')
+}, {
+  $set: {
+    Name: 'Bhups'
+  }
+}, {
+  $inc: {Age: 5}
