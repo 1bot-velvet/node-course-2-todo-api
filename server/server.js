@@ -38,17 +38,14 @@ app.get('/todos/:id', (req, res) => {
   var id = req.params.id;
 
   //Validate id using isValid
-
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();// for invalid id, sending back 404 and empty body
   };
-
   //findById
   Todo.findById(id).then((todo) => {
     if (!todo) {
       return res.status(404).send();//no document that matches query, send back 404 and empty body
     };
-
     res.send({todo});//success, send back todo
   }).catch((e) => {
     res.status(400).send();// error
