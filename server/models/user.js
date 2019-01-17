@@ -6,32 +6,32 @@ const bcrypt = require('bcryptjs');
 
 var UserSchema = new mongoose.Schema({
   email: {
-  type: String,
-  required: true,
-  trim: true,
-  minlength: 1,
-  unique: true,
-  validate: {
-    validator: validator.isEmail,
-    message: `{VALUE} is not a valid email`
-  }
-},
-password: {
-  type: String,
-  require: true,
-  minlength: 6
-},
-tokens: [{
-  access: {
     type: String,
-    require: true
+    required: true,
+    trim: true,
+    minlength: 1,
+    unique: true,
+    validate: {
+      validator: validator.isEmail,
+      message: '{VALUE} is not a valid email'
+    }
   },
-  token: {
+  password: {
     type: String,
-    require: true
-  }
-}]
-}, {usePushEach: true});//EXTRA LINE BUT NOT SURE IT'S SOLVING THE $pushAll ERRORS, USED CONCAT AND CREATED myArray LINE
+    require: true,
+    minlength: 6
+  },
+  tokens: [{
+    access: {
+      type: String,
+      require: true
+    },
+    token: {
+      type: String,
+      require: true
+    }
+  }]
+});//PRE Mongo3.2: EXTRA LINE BUT NOT SURE IT'S SOLVING THE $pushAll ERRORS, USED CONCAT AND CREATED myArray LINE: , {usePushEach: true}
 
 UserSchema.methods.toJSON = function () {
   var user = this;
@@ -44,9 +44,10 @@ UserSchema.methods.generateAuthToken = function () {
   var access = 'auth';
   var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
 
-//  user.tokens.push({access, token});
-//ORIGNAL CODE BUT GOT $pushAll ERRORS AND CONCAT WAS RECOMMENDED
-  user.tokens = user.tokens.concat({access, token});
+  user.tokens.push({access, token});
+
+//PRE Mongo3.2: ORIGNAL CODE BUT GOT $pushAll ERRORS AND CONCAT WAS RECOMMENDED
+//  user.tokens = user.tokens.concat({access, token});
 
   return user.save().then(() => {
     return token;
@@ -80,7 +81,7 @@ UserSchema.statics.findByToken = function (token) {
     '_id': decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'
-  })
+  });
 };
 
 UserSchema.statics.findByCredentials = function (email, password) {
@@ -124,14 +125,3 @@ UserSchema.pre('save', function (next) {
 var User = mongoose.model('User', UserSchema)
 
 module.exports = {User};
-
-
-// var user = new User({
-//   email: '1bot@nono.com        '
-// });
-//
-// user.save().then((doc) => {
-//   console.log('User saved', doc);
-// }, (e) => {
-//   console.log('Unable to save user', e);
-//
