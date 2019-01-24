@@ -17,7 +17,6 @@ app.use(bodyParser.json());
 
 //POST TODO ROUTE
 app.post('/todos', authenticate, (req, res) => {
-//  console.log(req.body);//should remove this Line
   var todo = new Todo({
     text: req.body.text,
     _creator: req.user._id
